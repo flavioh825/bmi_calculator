@@ -15,6 +15,26 @@ class _HomeState extends State<Home> {
 
   TextEditingController wheightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
+  String _information = "Informe seus dados.";
+
+  void _refreshFields() {
+    setState(() {
+      wheightController.text = "";
+      heightController.text = "";
+      _information = "Informe seus dados";
+    });
+  }
+
+  void _calculate() {
+    setState(() {
+      double weight = double.parse(wheightController.text);
+      double height = double.parse(heightController.text);
+      double bmi = weight / (height * height) / 100;
+      if (bmi < 18.6) {
+        _information = "Abaixo do peso (${bmi.toStringAsPrecision(4)})";
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +45,7 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.orange[300],
         actions: <Widget>[
           IconButton(icon: Icon(Icons.refresh),
-            onPressed: () {},
+            onPressed: _refreshFields,
           )
         ],
       ),
@@ -59,16 +79,15 @@ class _HomeState extends State<Home> {
               child: Container(
                 height: 50.0,
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: _calculate,
                   child: Text("Calcular",
                     style: TextStyle(color: Colors.white, fontSize: 25.0),
                   ),
                   color: Colors.orange[300],
-
                 ),
               ),
             ),
-            Text("Information",
+            Text(_information,
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.orange[400], fontSize: 35.0, ),
             )
